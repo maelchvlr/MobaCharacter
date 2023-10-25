@@ -14,6 +14,7 @@ class MYPROJECT_API APotionPuddle : public AActor
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UStaticMeshComponent* puddleMesh;
+
 	// Sets default values for this actor's properties
 	APotionPuddle();
 
@@ -24,12 +25,13 @@ public:
 
 
 protected:
+	float puddleTimer;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:
 	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	void Tick(float DeltaTime) override;
 
 };

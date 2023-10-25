@@ -11,6 +11,8 @@ APotionPuddle::APotionPuddle()
 	PrimaryActorTick.bCanEverTick = true;
 
 	puddleMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PuddleMesh"));
+    puddleTimer = 0.5f;
+
 }
 
 void APotionPuddle::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -27,12 +29,18 @@ void APotionPuddle::BeginPlay()
 {
 	Super::BeginPlay();
 	puddleMesh->OnComponentBeginOverlap.AddDynamic(this, &APotionPuddle::OnOverlap);
+
 }
 
 // Called every frame
 void APotionPuddle::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
+    Super::Tick(DeltaTime);
+    puddleTimer -= DeltaTime;
+    if (puddleTimer < 0.f)
+    {
+        Destroy();
+    }
 
 }
 
