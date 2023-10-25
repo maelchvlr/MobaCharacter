@@ -18,6 +18,11 @@ public:
 	AMOBA_CHARACTER();
 
 protected:
+	float sprintCooldown;
+	float sprintDuration;
+	bool sprinting = false;
+	bool sprintReady = true;
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
@@ -25,7 +30,7 @@ public:
 	UPROPERTY(EditAnywhere);
 	TSubclassOf<APotion> potionClass;
 	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	void Tick(float DeltaTime) override;
 
 	/** Called for movement input */
 	void Move(const FInputActionValue& Value);
@@ -35,6 +40,9 @@ public:
 
 	//Auto Attack
 	void Attack(const FInputActionValue& Value);
+
+	// Sprint
+	void Sprint(const FInputActionValue& value);
 
 
 

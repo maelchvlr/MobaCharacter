@@ -32,5 +32,8 @@ void APC_MOBA::BeginPlay()
 
         // Attack
         EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, character, &AMOBA_CHARACTER::Attack);
+
+        // Sprint
+        EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Triggered, character, &AMOBA_CHARACTER::Sprint);
     }
 }

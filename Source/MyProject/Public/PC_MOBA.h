@@ -30,6 +30,9 @@ class MYPROJECT_API APC_MOBA : public APlayerController
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
     class UInputAction* AttackAction;
 
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+    class UInputAction* SprintAction;
+
 
 protected:
     virtual void BeginPlay();
