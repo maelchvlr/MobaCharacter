@@ -18,8 +18,8 @@ public:
 	AMOBA_CHARACTER();
 
 protected:
-	float sprintCooldown;
-	float sprintDuration;
+	float sprintCooldown = 0.f;
+	float sprintDuration = 0.f;
 	bool sprinting = false;
 	bool sprintReady = true;
 

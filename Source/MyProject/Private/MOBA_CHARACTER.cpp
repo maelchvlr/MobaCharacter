@@ -6,11 +6,12 @@
 #include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
-AMOBA_CHARACTER::AMOBA_CHARACTER()
+AMOBA_CHARACTER::AMOBA_CHARACTER() 
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	GetCharacterMovement()->MaxWalkSpeed = 600.0f;
 	PrimaryActorTick.bCanEverTick = true;
+
 
 }
 
