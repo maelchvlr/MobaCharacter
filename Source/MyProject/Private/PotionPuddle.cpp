@@ -1,8 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
+
 #include "PotionPuddle.h"
 #include "MOBA_CHARACTER.h"
+
 
 // Sets default values
 APotionPuddle::APotionPuddle()
@@ -10,8 +12,16 @@ APotionPuddle::APotionPuddle()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	puddleMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PuddleMesh"));
-    HealMaterial = CreateDefaultSubobject<UMaterial>(TEXT("HealMaterial"));
-    PoisonMaterial = CreateDefaultSubobject<UMaterial>(TEXT("PoisonMaterial"));
+
+    HealNiagara = CreateDefaultSubobject<UNiagaraComponent>(TEXT("HealNiagara"));
+    PoisonNiagara = CreateDefaultSubobject<UNiagaraComponent>(TEXT("PoisonNiagara"));
+
+    HealNiagara->SetupAttachment(puddleMesh);
+    HealNiagara->SetAutoActivate(false);
+
+    PoisonNiagara->SetupAttachment(puddleMesh);
+    PoisonNiagara->SetAutoActivate(false);
+
     puddleTimer = 0.5f;
 
 }
@@ -21,11 +31,13 @@ void APotionPuddle::setHealing(bool healingP)
     healing = healingP;
     if (healing)
     {
-        puddleMesh->SetMaterial(0, HealMaterial);
+        HealNiagara->Activate(true);
+        PoisonNiagara->Deactivate();
     }
     else
     {
-        puddleMesh->SetMaterial(0, PoisonMaterial);
+        PoisonNiagara->Activate(true);
+        HealNiagara->Deactivate();
     }
 }
 

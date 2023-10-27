@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
 #include "GameFramework/Actor.h"
 #include "PotionPuddle.generated.h"
 
@@ -16,10 +18,10 @@ public:
 	UStaticMeshComponent* puddleMesh;
 
 	UPROPERTY(EditAnywhere)
-	class UMaterial* HealMaterial;
+	class UNiagaraComponent* HealNiagara;
 
 	UPROPERTY(EditAnywhere)
-	class UMaterial* PoisonMaterial;
+	class UNiagaraComponent* PoisonNiagara;
 
 	// Sets default values for this actor's properties
 	APotionPuddle();
