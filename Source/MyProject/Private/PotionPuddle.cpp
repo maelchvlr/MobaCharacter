@@ -65,4 +65,3 @@ void APotionPuddle::Tick(float DeltaTime)
     }
 
 }
-

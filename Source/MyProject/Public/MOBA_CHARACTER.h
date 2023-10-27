@@ -19,6 +19,13 @@ public:
 	AMOBA_CHARACTER();
 
 protected:
+	float healCooldown = 0.f;
+	float poisonCooldown = 0.f;
+	bool healThrowable = true;
+	bool poisonThrowable = true;
+
+
+
 	float sprintCooldown = 0.f;
 	float sprintDuration = 0.f;
 	bool sprinting = false;

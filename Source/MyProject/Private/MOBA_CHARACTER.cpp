@@ -32,7 +32,7 @@ void AMOBA_CHARACTER::Tick(float DeltaTime)
 	else if (sprintCooldown < 0 && !sprintReady)
 	{
 		sprintReady = true;
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("sirpnt ready"));
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("sprint ready"));
 	}
 
 	if (sprintDuration > 0)
@@ -43,7 +43,29 @@ void AMOBA_CHARACTER::Tick(float DeltaTime)
 	{
 		sprinting = false;
 		GetCharacterMovement()->MaxWalkSpeed = 600.0f;
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("sirpnt off"));
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("sprint off"));
+	}
+
+	if (healCooldown > 0)
+	{
+		healCooldown -= DeltaTime;
+	}
+	else if (healCooldown < 0 && !healThrowable)
+	{
+		healThrowable = true;
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("heal ready"));
+
+	}
+
+	if (poisonCooldown > 0)
+	{
+		poisonCooldown -= DeltaTime;
+	}
+	else if (poisonCooldown < 0 && !poisonThrowable)
+	{
+		poisonThrowable = true;
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("poison ready"));
+
 	}
 
 }
@@ -93,24 +115,36 @@ void AMOBA_CHARACTER::Potion(const FInputActionValue& Value, bool healing)
 
 	if (healing)
 	{
-		if (!potionClass) return;
-		APotion* spawnedPotion = GetWorld()->SpawnActor<APotion>(potionClass, Location, Rotation, SpawnInfo);
-		if (spawnedPotion && spawnedPotion->getMesh())
+		if (healThrowable)
 		{
-			spawnedPotion->getMesh()->AddImpulse(totalImpulse, NAME_None, true);
+			healThrowable = false;
+			healCooldown = 1.5f;
+			APotion* spawnedPotion = GetWorld()->SpawnActor<APotion>(potionClass, Location, Rotation, SpawnInfo);
+			if (spawnedPotion && spawnedPotion->getMesh())
+			{
+				spawnedPotion->getMesh()->AddImpulse(totalImpulse, NAME_None, true);
+			}
+		}
+		else
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("heal on cooldown"));
 		}
 	}
 	else
 	{
-		if (!poisonPotionClass)
+		if (poisonThrowable)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("connard"));
-			return;
+			poisonThrowable = false;
+			poisonCooldown = 5.f;
+			APoisonPotion* spawnedPotion = GetWorld()->SpawnActor<APoisonPotion>(poisonPotionClass, Location, Rotation, SpawnInfo);
+			if (spawnedPotion && spawnedPotion->getMesh())
+			{
+				spawnedPotion->getMesh()->AddImpulse(totalImpulse, NAME_None, true);
+			}
 		}
-		APoisonPotion* spawnedPotion = GetWorld()->SpawnActor<APoisonPotion>(poisonPotionClass, Location, Rotation, SpawnInfo);
-		if (spawnedPotion && spawnedPotion->getMesh())
+		else
 		{
-			spawnedPotion->getMesh()->AddImpulse(totalImpulse, NAME_None, true);
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("poison on cooldown"));
 		}
 	}
 }
