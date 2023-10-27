@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
 #include "Potion.h"
+#include "PoisonPotion.h"
 #include "MOBA_CHARACTER.generated.h"
 
 UCLASS()
@@ -29,6 +30,10 @@ protected:
 public:	
 	UPROPERTY(EditAnywhere);
 	TSubclassOf<APotion> potionClass;
+
+	UPROPERTY(EditAnywhere);
+	TSubclassOf<APoisonPotion> poisonPotionClass;
+
 	// Called every frame
 	void Tick(float DeltaTime) override;
 
@@ -39,7 +44,7 @@ public:
 	void Look(const FInputActionValue& Value);
 
 	//Auto Attack
-	void Attack(const FInputActionValue& Value);
+	void Potion(const FInputActionValue& Value, bool healing);
 
 	// Sprint
 	void Sprint(const FInputActionValue& value);

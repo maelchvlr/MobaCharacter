@@ -1,23 +1,22 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Potion.h"
-#include "PotionPuddle.h"
+#include "PoisonPotion.h"
 
 // Sets default values
-APotion::APotion()
+APoisonPotion::APoisonPotion()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	potionMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PotionMesh"));
+	poisonPotionMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PoisonPotionMesh"));
 
-	
+
 
 
 }
 
-void APotion::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+void APoisonPotion::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	FVector Location = Hit.ImpactPoint + FVector(0, 0, 10);
 	FRotator Rotation(0.0f, 0.0f, 0.0f);
@@ -36,7 +35,7 @@ void APotion::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrim
 
 	if (spawnedPuddle != nullptr)
 	{
-		spawnedPuddle->setHealing(true);  // Set properties on the spawned puddle
+		spawnedPuddle->setHealing(false);  // Set properties on the spawned puddle
 
 		// Finalize the spawning process
 		spawnedPuddle->FinishSpawning(SpawnTransform);
@@ -47,15 +46,15 @@ void APotion::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrim
 }
 
 // Called when the game starts or when spawned
-void APotion::BeginPlay()
+void APoisonPotion::BeginPlay()
 {
 	Super::BeginPlay();
-	potionMesh->OnComponentHit.AddDynamic(this, &APotion::OnHit);
-	
+	poisonPotionMesh->OnComponentHit.AddDynamic(this, &APoisonPotion::OnHit);
+
 }
 
 // Called every frame
-void APotion::Tick(float DeltaTime)
+void APoisonPotion::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 

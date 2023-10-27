@@ -2,7 +2,6 @@
 
 
 #include "MOBA_CHARACTER.h"
-#include "Potion.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
@@ -76,33 +75,46 @@ void AMOBA_CHARACTER::Look(const FInputActionValue& Value)
 	}
 }
 
-void AMOBA_CHARACTER::Attack(const FInputActionValue& Value)
+void AMOBA_CHARACTER::Potion(const FInputActionValue& Value, bool healing)
 {
-	// Get the player's forward direction
-	APlayerCameraManager* playerCamera = GetWorld()->GetFirstPlayerController()->PlayerCameraManager;
+	APlayerCameraManager* playerCamera = GetWorld()->GetFirstPlayerController() ? GetWorld()->GetFirstPlayerController()->PlayerCameraManager : nullptr;
+	
+
 	FVector viewDirection = playerCamera->GetActorForwardVector();
-
-
-
-	// Set the distance you want the sphere to spawn in front of the player
 	float distanceInFront = 50.0f;
 
-	// Calculate the new spawn location
 	FVector Location = GetActorLocation() + (viewDirection * distanceInFront);
-
 	FRotator Rotation(0.0f, 0.0f, 0.0f);
 	FActorSpawnParameters SpawnInfo;
 
-	APotion* spawnedPotion = GetWorld()->SpawnActor<APotion>(potionClass, Location, Rotation, SpawnInfo);
-
-	float forwardImpulseIntensity = 500.0f; 
-	float upwardImpulseIntensity = 500.0f;   
-
+	float forwardImpulseIntensity = 500.0f;
+	float upwardImpulseIntensity = 500.0f;
 	FVector totalImpulse = (viewDirection * forwardImpulseIntensity) + (FVector::UpVector * upwardImpulseIntensity);
-	spawnedPotion->getMesh()->AddImpulse(totalImpulse, NAME_None, true);
 
-
+	if (healing)
+	{
+		if (!potionClass) return;
+		APotion* spawnedPotion = GetWorld()->SpawnActor<APotion>(potionClass, Location, Rotation, SpawnInfo);
+		if (spawnedPotion && spawnedPotion->getMesh())
+		{
+			spawnedPotion->getMesh()->AddImpulse(totalImpulse, NAME_None, true);
+		}
+	}
+	else
+	{
+		if (!poisonPotionClass)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("connard"));
+			return;
+		}
+		APoisonPotion* spawnedPotion = GetWorld()->SpawnActor<APoisonPotion>(poisonPotionClass, Location, Rotation, SpawnInfo);
+		if (spawnedPotion && spawnedPotion->getMesh())
+		{
+			spawnedPotion->getMesh()->AddImpulse(totalImpulse, NAME_None, true);
+		}
+	}
 }
+
 
 void AMOBA_CHARACTER::Sprint(const FInputActionValue& value)
 {

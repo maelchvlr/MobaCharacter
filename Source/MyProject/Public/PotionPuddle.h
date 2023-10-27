@@ -15,10 +15,17 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UStaticMeshComponent* puddleMesh;
 
+	UPROPERTY(EditAnywhere)
+	class UMaterial* HealMaterial;
+
+	UPROPERTY(EditAnywhere)
+	class UMaterial* PoisonMaterial;
+
 	// Sets default values for this actor's properties
 	APotionPuddle();
 
 	UStaticMeshComponent* getMesh() { return puddleMesh; }
+	void setHealing(bool healingP);
 
 	UFUNCTION()
 	void OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
@@ -26,6 +33,7 @@ public:
 
 protected:
 	float puddleTimer;
+	bool healing;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

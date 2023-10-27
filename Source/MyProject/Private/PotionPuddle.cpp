@@ -9,18 +9,40 @@ APotionPuddle::APotionPuddle()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 	puddleMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PuddleMesh"));
+    HealMaterial = CreateDefaultSubobject<UMaterial>(TEXT("HealMaterial"));
+    PoisonMaterial = CreateDefaultSubobject<UMaterial>(TEXT("PoisonMaterial"));
     puddleTimer = 0.5f;
 
+}
+
+void APotionPuddle::setHealing(bool healingP)
+{
+    healing = healingP;
+    if (healing)
+    {
+        puddleMesh->SetMaterial(0, HealMaterial);
+    }
+    else
+    {
+        puddleMesh->SetMaterial(0, PoisonMaterial);
+    }
 }
 
 void APotionPuddle::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
     if (OtherActor->IsA(AMOBA_CHARACTER::StaticClass()))
     {
-        GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Player stepped in the puddle!"));
-        // Handle what you want to happen when the player steps in the puddle here.
+        if (healing)
+        {
+            GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("healing player"));
+            // Handle what you want to happen when the player steps in the puddle here.
+        }
+        else
+        {
+            GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("damaging player"));
+            // Handle poison
+        }
     }
 }
 

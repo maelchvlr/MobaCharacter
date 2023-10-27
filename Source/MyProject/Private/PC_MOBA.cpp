@@ -31,7 +31,10 @@ void APC_MOBA::BeginPlay()
         EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, character, &AMOBA_CHARACTER::Look);
 
         // Attack
-        EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, character, &AMOBA_CHARACTER::Attack);
+        EnhancedInputComponent->BindAction(HealingAction, ETriggerEvent::Triggered, character, &AMOBA_CHARACTER::Potion, true);
+
+        // Poison
+        EnhancedInputComponent->BindAction(PoisonAction, ETriggerEvent::Triggered, character, &AMOBA_CHARACTER::Potion, false);
 
         // Sprint
         EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Triggered, character, &AMOBA_CHARACTER::Sprint);
