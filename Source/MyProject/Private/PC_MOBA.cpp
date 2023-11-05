@@ -38,5 +38,11 @@ void APC_MOBA::BeginPlay()
 
         // Sprint
         EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Triggered, character, &AMOBA_CHARACTER::Sprint);
+
+        // Spell
+        EnhancedInputComponent->BindAction(SpellAction, ETriggerEvent::Triggered, character, &AMOBA_CHARACTER::Spell);
+
+        // Ult
+        EnhancedInputComponent->BindAction(UltAction, ETriggerEvent::Triggered, character, &AMOBA_CHARACTER::Ultimate);
     }
 }

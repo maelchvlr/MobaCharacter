@@ -7,6 +7,7 @@
 #include "InputActionValue.h"
 #include "Potion.h"
 #include "PoisonPotion.h"
+#include "Cauldron.h"
 #include "MOBA_CHARACTER.generated.h"
 
 UCLASS()
@@ -19,17 +20,24 @@ public:
 	AMOBA_CHARACTER();
 
 protected:
+
+	// Potion related
 	float healCooldown = 0.f;
 	float poisonCooldown = 0.f;
 	bool healThrowable = true;
 	bool poisonThrowable = true;
 
-
-
+	// Sprint related
 	float sprintCooldown = 0.f;
 	float sprintDuration = 0.f;
 	bool sprinting = false;
 	bool sprintReady = true;
+
+	//ultimate related
+	float ultimateCooldown = 0.f;
+	bool ultimateReady = true;
+
+
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -41,6 +49,9 @@ public:
 	UPROPERTY(EditAnywhere);
 	TSubclassOf<APoisonPotion> poisonPotionClass;
 
+	UPROPERTY(EditAnywhere);
+	TSubclassOf<ACauldron> cauldronClass;
+
 	// Called every frame
 	void Tick(float DeltaTime) override;
 
@@ -50,12 +61,17 @@ public:
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
 
-	//Auto Attack
+	// Potion attacks
 	void Potion(const FInputActionValue& Value, bool healing);
 
 	// Sprint
 	void Sprint(const FInputActionValue& value);
 
+	// RayCast attack
+	void Spell(const FInputActionValue& value);
+
+	// Ultimate
+	void Ultimate(const FInputActionValue& value);
 
 
 

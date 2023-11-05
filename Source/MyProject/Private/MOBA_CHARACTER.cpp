@@ -68,6 +68,17 @@ void AMOBA_CHARACTER::Tick(float DeltaTime)
 
 	}
 
+	if (ultimateCooldown > 0)
+	{
+		ultimateCooldown -= DeltaTime;
+	}
+	else if (ultimateCooldown < 0 && !ultimateReady)
+	{
+		ultimateReady = true;
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("ultimate ready"));
+
+	}
+
 }
 
 
@@ -160,5 +171,47 @@ void AMOBA_CHARACTER::Sprint(const FInputActionValue& value)
 		GetCharacterMovement()->MaxWalkSpeed = 1200.0f;
 		sprinting = true;
 		sprintReady = false;
+	}
+}
+
+void AMOBA_CHARACTER::Spell(const FInputActionValue& value)
+{
+}
+
+void AMOBA_CHARACTER::Ultimate(const FInputActionValue& value)
+{
+
+	APlayerCameraManager* playerCamera = GetWorld()->GetFirstPlayerController() ? GetWorld()->GetFirstPlayerController()->PlayerCameraManager : nullptr;
+
+
+	FVector viewDirection = playerCamera->GetActorForwardVector();
+	float distanceInFront = 50.0f;
+
+	FVector Location = GetActorLocation() + (viewDirection * distanceInFront);
+	FRotator Rotation(0.0f, 0.0f, 0.0f);
+	FActorSpawnParameters SpawnInfo;
+
+	float forwardImpulseIntensity = 500.0f;
+	float upwardImpulseIntensity = 500.0f;
+	FVector totalImpulse = (viewDirection * forwardImpulseIntensity) + (FVector::UpVector * upwardImpulseIntensity);
+
+	if (ultimateReady)
+	{
+		ultimateReady = false;
+		ultimateCooldown = 1.5f;
+		ACauldron* spawnedCauldron = GetWorld()->SpawnActor<ACauldron>(cauldronClass, Location, Rotation, SpawnInfo);
+		if (spawnedCauldron && spawnedCauldron->getMesh())
+		{
+			spawnedCauldron->getMesh()->AddImpulse(totalImpulse, NAME_None, true);
+
+			// Lock rotation on the Z-axis (or any other axis as needed)
+			spawnedCauldron->getMesh()->SetConstraintMode(EDOFMode::SixDOF);
+			spawnedCauldron->getMesh()->GetBodyInstance()->bLockXRotation = true;
+			spawnedCauldron->getMesh()->GetBodyInstance()->bLockYRotation = true;
+		}
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("heal on cooldown"));
 	}
 }
