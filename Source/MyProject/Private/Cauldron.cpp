@@ -13,9 +13,11 @@ ACauldron::ACauldron()
     cauldronMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("CauldronMesh"));
     RootComponent = cauldronMesh;
 
+
     // Ensure the mesh simulates physics so that it has velocity
     cauldronMesh->SetSimulatePhysics(true);
 
+    hitbox = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Hitbox"));
     // Initialize the flag
     bRotationCorrected = false;
 }

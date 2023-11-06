@@ -198,12 +198,12 @@ void AMOBA_CHARACTER::Ultimate(const FInputActionValue& value)
 	if (ultimateReady)
 	{
 		ultimateReady = false;
-		ultimateCooldown = 1.5f;
+		ultimateCooldown = 40.f;
 		ACauldron* spawnedCauldron = GetWorld()->SpawnActor<ACauldron>(cauldronClass, Location, Rotation, SpawnInfo);
 		if (spawnedCauldron && spawnedCauldron->getMesh())
 		{
 			spawnedCauldron->getMesh()->AddImpulse(totalImpulse, NAME_None, true);
-
+			spawnedCauldron->getHitbox()->AddImpulse(totalImpulse, NAME_None, true);
 			// Lock rotation on the Z-axis (or any other axis as needed)
 			spawnedCauldron->getMesh()->SetConstraintMode(EDOFMode::SixDOF);
 			spawnedCauldron->getMesh()->GetBodyInstance()->bLockXRotation = true;
@@ -212,6 +212,6 @@ void AMOBA_CHARACTER::Ultimate(const FInputActionValue& value)
 	}
 	else
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("heal on cooldown"));
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("ult on cooldown"));
 	}
 }

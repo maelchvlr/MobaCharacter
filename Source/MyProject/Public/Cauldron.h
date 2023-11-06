@@ -15,6 +15,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly);
 	UStaticMeshComponent* cauldronMesh;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly);
+	UStaticMeshComponent* hitbox;
+
 	bool bRotationCorrected;
 
 
@@ -22,6 +25,7 @@ public:
 	ACauldron();
 
 	UStaticMeshComponent* getMesh() { return cauldronMesh; }
+	UStaticMeshComponent* getHitbox() { return hitbox; }
 
 protected:
 	FTimerHandle RotationCorrectionTimer;
